@@ -1,10 +1,11 @@
+from __future__ import division
 import numpy as np
 import matplotlib.pyplot as plt
+
 import tensorflow as tf
 import tensorflow_datasets as tfds
 import keras
 
-from __future__ import division
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.activations import relu, linear
