@@ -17,7 +17,7 @@ import AttrAdder
 
 
 def load_housing_path():
-    return pd.read_csv("housing.csv")
+    return pd.read_csv("src/housing.csv")
   
 def getCorrMatrix(data):
     aux = data.copy().drop('ocean_proximity', axis=1)
@@ -31,7 +31,7 @@ data.hist(bins=50, figsize=(20,15))
 plt.show()
 
 # Plot data points' geolocation in a map
-map_file = "ne_110m_admin_0_countries.zip"
+map_file = "src/ne_110m_admin_0_countries.zip"
     
 worldmap = gpd.read_file(map_file)
 
