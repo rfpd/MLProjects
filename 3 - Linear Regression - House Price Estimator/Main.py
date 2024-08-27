@@ -17,9 +17,20 @@ import AttrAdder
 
 
 def load_housing_path():
+    """ Load housing data
+        Args: 
+        Returns: 
+            (Pandas DataFrame) : Housing data
+    """
     return pd.read_csv("src/housing.csv")
-  
+    
 def getCorrMatrix(data):
+    """ Get correlation matrix of attributes regarding to the median house value
+        Args:
+            data (Pandas DataFrame) : Housing data
+        Returns: 
+            (Pandas Dataframe) : Correlation matrix
+    """  
     aux = data.copy().drop('ocean_proximity', axis=1)
     return aux.corr()["median_house_value"].sort_values(ascending=False)  
     
@@ -74,7 +85,6 @@ for val_index, test_index in split2.split(val_test_set, val_test_set['income_cat
     test_set = val_test_set.iloc[test_index]
 
 # Discarding attributes not needed for the model such as latitude, longitude and "income_cat" used for the stratified split
-
 train_set = train_set.drop(['income_cat','latitude','longitude'], axis=1)
 val_set = val_set.drop(['income_cat','latitude','longitude'], axis=1)
 test_set = test_set.drop(['income_cat','latitude','longitude'], axis=1)
@@ -90,7 +100,6 @@ Y_test = test_set['median_house_value'].copy()
 
 # Hyperparameter tunning:
 # 1 - Number of polynomial degrees
-
 num_attrs = list(X_train)
 num_attrs.remove('ocean_proximity')
 
@@ -120,7 +129,6 @@ for deg in range(1,6):
 labels = np.concatenate((np.array(list(X_train)),["population_per_household","rooms_per_house"],["<1H OCEAN", "INLAND", "ISLAND", "NEAR BAY", "NEAR OCEAN"]), axis=0)
 
 # Creating a pipeline to transform the input data to the model, first missing empty values with the median, then adding new attributes and finally standardizing all values
-
 num_pipeline = Pipeline([
         ('imputer',SimpleImputer(strategy='median')),
         ('attribs_adder',AttrAdder.AttrAdder()),
@@ -128,7 +136,6 @@ num_pipeline = Pipeline([
     ])
     
 # Creating a ColumnTransformer pipeline that uses the "num_pipeline" on numeric fields and applies a OneHotEncoder in enumerate values
-
 full_pipeline = ColumnTransformer([
         ('num', num_pipeline, num_attrs),
         ('cat', OneHotEncoder(), ['ocean_proximity'])
@@ -137,7 +144,6 @@ full_pipeline = ColumnTransformer([
 X_train_prep = full_pipeline.fit_transform(X_train)
 
 # 2 - With vs without L2 regularization
-
 lin_reg = LinearRegression()
 lin_reg.fit(X_train_prep,Y_train)
 
